@@ -1,0 +1,25 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./k8s/server-node-stateful-set.yml
+      - ./k8s/server-node-headless-service.yml
+      - ./k8s/proxy-node-deployment.yml
+      - ./k8s/proxy-node-cluster-ip.yml
+build:
+  local:
+    push: false
+  artifacts:
+    - image: snowd3n/permadeath-proxy-node
+      context: .
+      docker:
+        dockerfile: dockerfiles/proxy-node.dev.Dockerfile
+      sync:
+        infer: ["**/*"]
+    - image: snowd3n/permadeath-zone-node
+      context: .
+      docker:
+        dockerfile: dockerfiles/server-node.dev.Dockerfile
+      sync:
+        infer: ["**/*"]

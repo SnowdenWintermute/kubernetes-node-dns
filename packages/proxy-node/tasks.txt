@@ -1,0 +1,18 @@
+1. Receive updates from zone nodes
+    a.  Updates will be in the form of "publishable state", unique to each client
+2. Compress update packets (make use of packet-manager library)
+    a.  Round down / use only INTs not floats
+    b.  Send only deltas
+        i.  Keep a copy of what was sent and compare new updates to see changes
+    c.  Send only large deltas
+    d.  Give queue priority to the most drastic changes
+    e.  Can skip sending any changes below a certain threshold of change
+    f.  Can send less frequent updates about non-targeted or far away entities
+3. Distribute update packets to clients
+    a.  Distribution should be spread out over some miliseconds
+4. Receive messages from clients
+
+Notes:
+- Client nodes can be shared by multiple realms
+- Can use multiple threads
+- Option to implement CPU-consuming anti-cheat here to reduce load on zone nodes

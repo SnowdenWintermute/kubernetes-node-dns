@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy-node-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: proxy-node
+  template:
+    metadata:
+      labels:
+        component: proxy-node
+    spec:
+      containers:
+        - name: proxy-node
+          image: snowd3n/permadeath-proxy-node
+          ports:
+            - containerPort: 5002

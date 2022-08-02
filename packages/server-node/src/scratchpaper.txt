@@ -1,0 +1,45 @@
+
+require("dotenv").config();
+const port = process.env.PORT;
+const express = require("express");
+const app = express();
+const server = require("http").createServer(app);
+const ws = require("ws");
+const wss = new ws.Server({ server });
+const inputHandler = require("./inputHandler/inputHandler");
+
+// load game state for this zone
+// start game loop
+// queue receiving inputs
+// queue outgoing packets
+console.log("zone node started");
+wss.on("connection", (socket: any) => {
+  console.log("a client connected");
+  socket.on("message", (data: any) => {
+    console.log(data.toString());
+  });
+});
+app.get("/", (req: any, res: any) => res.send("hello from zone node"));
+server.listen(port, () => console.log("listening on " + port));
+
+// let testAddress: string;
+// setInterval(async () => {
+//   // console.log(port);
+//   try {
+//     await dns.lookup("database-headless-service", (err: any, address: any) => {
+//       if (err) console.log(err);
+//       else {
+//         console.log("address: " + address);
+//         testAddress = address;
+//       }
+//     });
+//     console.log(JSON.stringify(testAddress));
+//     console.log(`http://${testAddress}:80`);
+//     if (testAddress) {
+//       const map = await axios.get(`http://${testAddress}:80/world-map`);
+//       console.log(map.data);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }, 3000);

@@ -1,0 +1,33 @@
+1. Compute game logic
+    a.  Process queue of received actions sequentially
+        i.  Must include actions of players in the zone, as well
+            as actions of players in bordering zones if those actions
+            affect entities on this zone's border with the other zone
+    b.  Each tick creates a new "server state"
+    c.  Implement Cross-Zone Logic
+        i.      Receive entity data from bordering zone-nodes
+        ii.     Send entity data to bordering zone-nodes
+        iii.    Enqueue action requests from bordering zones
+        iV.     Send action requests to bordering zones (if player actions would affect that zone's mobs)
+        v.      Receive hand-offs of entities entering from bordering zones
+        vi.     Send hand-offs of entities leaving to a bordering zone    
+        vii.    Note - Zone overlaps must be at least the same size as player vision range radius
+2. Create "publishable state"
+    a.  Create a publishable state for each client based on their vision range
+    b.  If two or more clients have the same publishable state due to 
+        having the same area of interest, only send one copy to the client node
+        for distribution
+    c.  Include data about the mobs owned by this zone as well as "ghosts" of mobs in bordering zones
+        if the player can see them
+3. Queue new updates in a sending queue (use message-queue module)
+4. Send updates to client nodes
+    a.  Sending queue operates on a separate thread from the game loop
+    b.  Messages in queue should be the game state at their creation, not a direct
+        reference to the current game state
+5. Load game state from database node upon startup
+6. Send write requests to database node
+
+
+Notes
+- Game logic should be in a single thread
+- Entities should exist on only one zone node at a time

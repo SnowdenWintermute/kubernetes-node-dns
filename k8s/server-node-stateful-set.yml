@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: server-node-stateful-set
+spec:
+  serviceName: server-node
+  replicas: 2
+  selector:
+    matchLabels:
+      component: server-node
+  template:
+    metadata:
+      labels:
+        component: server-node
+    spec:
+      containers:
+        - name: server-node
+          image: snowd3n/permadeath-zone-node
+          ports:
+            - containerPort: 80
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
